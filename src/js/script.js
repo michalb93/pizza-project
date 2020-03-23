@@ -76,28 +76,28 @@
 		  menuContainer.appendChild(thisProduct.element);
 	  }
 	  
-	  initAccordion(){
+	 initAccordion(){
 	    const thisProduct = this;
 		/* find the clickable trigger (the element that should react to clicking) */
          let clickedElement = thisProduct.element.querySelector(select.menuProduct.clickable);	
-    /* START: click event listener to trigger */
+        /* START: click event listener to trigger */
         clickedElement.addEventListener('click', function(event){
-			console.log('clicked:', clickedElement);
-			/* prevent default action for event */
-			event.preventDefault();
-			/* toggle active class on element of thisProduct */
-			thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
-			/* find all active products */
-			const activeProducts = document.querySelectorAll(select.all.menuProductActive);
-			console.log('found active products:', activeProducts);
-			/* START LOOP: for each active product */
-			for(let activeProduct in activeProducts){
-			  /* START: if the active product isn't the element of thisProduct */
-			  if(activeProduct !== clickedElement){
-				/* remove class active for the active product */
-                activeProduct.classList.remove(classNames.menuProduct.wrapperActive);  				
-			  }	  
-			}
+	      console.log('clicked:', clickedElement);
+		  /* prevent default action for event */
+	      event.preventDefault();
+		  /* toggle active class on element of thisProduct */
+		  thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
+	      /* find all active products */
+		  const activeProducts = document.querySelectorAll(select.all.menuProductActive);
+		  console.log('found active products:', activeProducts);
+		  /* START LOOP: for each active product */
+		  for(let activeProduct in activeProducts){
+		    /* START: if the active product isn't the element of thisProduct */
+		    if(activeProduct !== clickedElement){
+		    /* remove class active for the active product */
+            activeProduct.classList.remove(classNames.menuProduct.wrapperActive);  				
+		    }	  
+		  }
 		});
       }
 

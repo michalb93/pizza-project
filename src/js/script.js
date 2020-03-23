@@ -59,9 +59,20 @@
 		  thisProduct.id = id;
 		  thisProduct.data = data;
 		  thisProduct.renderInMenu();
+		  thisProduct.getElements();
 		  thisProduct.initAccordion();
 		  console.log('new Product:', thisProduct);
 	  }
+	  
+	  getElements(){
+        const thisProduct = this;
+
+        thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+        thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
+        thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
+        thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+        thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+         }
 	  
 	  renderInMenu(){
 		  const thisProduct = this;
@@ -79,7 +90,7 @@
 	 initAccordion(){
 	    const thisProduct = this;
 		/* find the clickable trigger (the element that should react to clicking) */
-         let clickedElement = thisProduct.element.querySelector(select.menuProduct.clickable);	
+         let clickedElement = thisProduct.accordionTrigger;	
         /* START: click event listener to trigger */
         clickedElement.addEventListener('click', function(event){
 	      console.log('clicked:', clickedElement);
@@ -88,6 +99,7 @@
 		  /* toggle active class on element of thisProduct */
 		  thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
 	      /* find all active products */
+		  console.log('problem', thisProduct)
 		  const activeProducts = document.querySelectorAll(select.all.menuProductActive);
 		  console.log('found active products:', activeProducts);
 		  /* START LOOP: for each active product */

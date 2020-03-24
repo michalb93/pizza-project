@@ -79,6 +79,7 @@
       //console.log('thisProduct.cartButton',thisProduct.cartButton)
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       //console.log('thisProduct.priceElem',thisProduct.priceElem)    
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
     
     renderInMenu(){
@@ -175,28 +176,29 @@
              console.log('reduced price ', option.price);
              /* END ELSE IF: if option is not selected and option is default */
           }
+             //for(let image of allImages){
+             // 1 petla for -> 2 if w srodku 
+             }
+             const allImages = thisProduct.imageWrapper.querySelectorAll('.' + paramId + '-' + optionId);
+             console.log('images', allImages);
+             if(optionSelected){
+               for(let image of allImages){
+                image.classList.add(classNames.menuProduct.imageVisible);
+               } 
+            } else {
+               for(let image of allImages){
+                 image.classList.remove(classNames.menuProduct.imageVisible);
+               }
+             }
+             
+        }
              thisProduct.priceElem.innerHTML = price;
              console.log('final price', price);
-        
-        /* END LOOP: for each optionId in param.options */  
-        }
       /* END LOOP: for each paramId in thisProduct.data.params */
       }
     /* set the contents of thisProduct.priceElem to be the value of variable price */ 
     }
-     
-      
 
-      
-      
-  
-  /* END LOOP: for each paramId in thisProduct.data.params */
-
-  /* set the contents of thisProduct.priceElem to be the value of variable price */
- 
-    
-    
-    
     
   }
   

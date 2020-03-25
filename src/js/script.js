@@ -62,8 +62,9 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
-      console.log('new Product:', thisProduct);
+      //console.log('new Product:', thisProduct);
     }
     
     getElements(){
@@ -80,13 +81,14 @@
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       //console.log('thisProduct.priceElem',thisProduct.priceElem)    
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
     
     renderInMenu(){
       const thisProduct = this;
       /*generate HTML based on template */
       const generatedHTML = templates.menuProduct(thisProduct.data);
-      console.log('generatedHTML:', generatedHTML);
+      //console.log('generatedHTML:', generatedHTML);
       /* create element using utils.createElementFromHTML */
       thisProduct.element = utils.createDOMFromHTML(generatedHTML);
       /*find menu container*/
@@ -124,7 +126,7 @@
     initOrderForm(){
       const thisProduct = this;
 
-      console.log('initOrderForm',thisProduct);
+      //console.log('initOrderForm',thisProduct);
       thisProduct.form.addEventListener('submit', function(event){
         event.preventDefault();
         thisProduct.processOrder();
@@ -142,13 +144,23 @@
       });
     }
 
+    initAmountWidget(){
+      const thisProduct = this;
+
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+
+      thisProduct.amountWidgetElem.addEventListener('updated', function(){
+        thisProduct.processOrder();
+      });
+    }
+
     
     processOrder(){
       const thisProduct = this;
       //console.log('ProcessOrder',thisProduct);
       /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
       const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log('formData', formData);
+      //console.log('formData', formData);
       /* set variable price to equal thisProduct.data.price */
       let price = thisProduct.data.price;
       //const allParams = thisProduct.data.params;
@@ -156,7 +168,7 @@
       for(let paramId in thisProduct.data.params){
         /* save the element in thisProduct.data.params with key paramId as const param */
         const param = thisProduct.data.params[paramId];
-        console.log('param', param);
+        //console.log('param', param);
         /* START LOOP: for each optionId in param.options */
         for(let optionId in param.options){
           /* save the element in param.options with key optionId as const option */
@@ -166,41 +178,94 @@
           if(optionSelected && !option.default){
             /* add price of option to variable price */
             price = price + option.price;
-            console.log('new price:', option.price);
+            //console.log('new price:', option.price);
             /* END IF: if option is selected and option is not default */
           }
           /* START ELSE IF: if option is not selected and option is default */
           else if(!optionSelected && option.default){
-             /* deduct price of option from price */
-             price = price - option.price;
-             console.log('reduced price ', option.price);
-             /* END ELSE IF: if option is not selected and option is default */
+            /* deduct price of option from price */
+            price = price - option.price;
+            //console.log('reduced price ', option.price);
+            /* END ELSE IF: if option is not selected and option is default */
           }
-             //for(let image of allImages){
-             // 1 petla for -> 2 if w srodku 
-             }
-             const allImages = thisProduct.imageWrapper.querySelectorAll('.' + paramId + '-' + optionId);
-             console.log('images', allImages);
-             if(optionSelected){
-               for(let image of allImages){
-                image.classList.add(classNames.menuProduct.imageVisible);
-               } 
-            } else {
-               for(let image of allImages){
-                 image.classList.remove(classNames.menuProduct.imageVisible);
-               }
-             }
-             
-        }
-             thisProduct.priceElem.innerHTML = price;
-             console.log('final price', price);
-      /* END LOOP: for each paramId in thisProduct.data.params */
-      }
+          const allImages = thisProduct.imageWrapper.querySelectorAll('.' + paramId + '-' + optionId);
+          //console.log('images', allImages);
+          if(optionSelected){
+            for(let image of allImages){
+              image.classList.add(classNames.menuProduct.imageVisible);
+            }
+          } else{
+            for(let image of allImages){
+              image.classList.remove(classNames.menuProduct.imageVisible);
+            }
+            //for(let image of allImages){
+            // 1 petla for -> 2 if w srodku 
+          }
+        }        
+      }    
+      price *= thisProduct.amountWidget.value;
+      thisProduct.priceElem.innerHTML = price;
+      console.log('final price', price);
+    /* END LOOP: for each paramId in thisProduct.data.params */
+    }
     /* set the contents of thisProduct.priceElem to be the value of variable price */ 
+  }
+
+  class AmountWidget{
+    constructor(element){
+      const thisWidget = this;
+      thisWidget.getElements(element);
+      thisWidget.setValue(thisWidget.input.value);
+      console.log('amountWidget:', thisWidget);
+      console.log('constructor arguments:', element);
     }
 
-    
+    getElements(element){
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value){
+      const thisWidget = this;
+
+      const newValue = parseInt(value);
+
+      /*TODO: Add validation*/
+
+      thisWidget.value = newValue;
+      thisWidget.announce();
+      thisWidget.input.value = thisWidget.value;
+    }
+
+    initActions(){
+      const thisWidget = this;
+      thisWidget.input.addEventListener('change', function(){
+        thisWidget.setValue=thisWidget.input.value;
+      });
+
+      thisWidget.linkDecrease.addEventListener('click', function(event){
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value - 1);
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function(event){
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value + 1);
+      });
+    }
+
+    announce(){
+      const thisWidget = this;
+
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
+    }
   }
+  
   
   const app = {
     initMenu: function(){

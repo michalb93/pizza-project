@@ -351,10 +351,12 @@
       
       thisCart.dom.toggleTrigger.addEventListener('click', function(){
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+
       });
     }
 
     add(menuProduct){
+      const thisCart = this;
       console.log('adding product', menuProduct);
       const generatedHTML = templates.cartProduct(menuProduct);
       menuProduct.element = utils.createDOMFromHTML(generatedHTML);

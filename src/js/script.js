@@ -136,7 +136,7 @@
     initAccordion(){
       const thisProduct = this;
       /* find the clickable trigger (the element that should react to clicking) */
-      let clickedElement = thisProduct.accordionTrigger; 
+      const clickedElement = thisProduct.accordionTrigger; 
       /* START: click event listener to trigger */
       clickedElement.addEventListener('click', function(event){
         console.log('clicked:', clickedElement);
@@ -207,7 +207,7 @@
       //console.log('formData', formData);
       /* set variable price to equal thisProduct.data.price */
       thisProduct.params = {};
-      let price = thisProduct.data.price;
+      const price = thisProduct.data.price;
       //const allParams = thisProduct.data.params;
       /* START LOOP: for each paramId in thisProduct.data.params */
       for(let paramId in thisProduct.data.params){
@@ -328,7 +328,7 @@
 
   class Cart{
     constructor(element){
-      const thisCart=this;
+      const thisCart = this;
       
       thisCart.products = [];
 
@@ -344,6 +344,7 @@
 
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
     }
 
     initActions(){
@@ -353,17 +354,54 @@
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
 
       });
+
+      thisCart.dom.productList.addEventListener('updated', function () {
+        thisCart.update();
+      });
     }
 
     add(menuProduct){
       const thisCart = this;
-      console.log('adding product', menuProduct);
+      
       const generatedHTML = templates.cartProduct(menuProduct);
       menuProduct.element = utils.createDOMFromHTML(generatedHTML);
-      const cartContainer = document.querySelector(select.containerOf.cart)
+      const generatedDOM = menuProduct.element;
+      const cartContainer = document.querySelector(select.containerOf.cart);
       cartContainer.appendChild(menuProduct.element);
+
+      thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
+      console.log('thisCart.products', thisCart.products);
     }
 
+  }
+
+  class CartProduct{
+    constructor(menuProduct,element){
+      const thisCartProduct = this;
+      thisCartProduct.id = menuProduct.id;
+      thisCartProduct.name = menuProduct.name;
+      thisCartProduct.price = menuProduct.price;
+      thisCartProduct.priceSingle = menuProduct.priceSingle;
+      thisCartProduct.amount = menuProduct.amount;
+
+      thisCartProduct.params = JSON.parse(JSON.stringify(menuProduct.params));
+      
+      thisCartProduct.getElements(element);
+      console.log('thisCartProduct', thisCartProduct);
+
+    }
+
+    getElements(element){
+      const thisCartProduct = this;
+      
+      thisCartProduct.dom = {};
+      
+      thisCartProduct.dom.wrapper = element;
+      thisCartProduct.dom.amountWidget = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.amountWidget);
+      thisCartProduct.dom.price = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.price);
+      thisCartProduct.dom.edit = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.edit);
+      thisCartProduct.dom.remove = thisCartProduct.dom.wrapper.querySelector(select.cartProduct.remove);
+    }
   }
   
   

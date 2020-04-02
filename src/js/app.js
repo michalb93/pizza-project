@@ -1,7 +1,7 @@
 import {Product} from './components/product.js';
 import {Cart} from './components/cart.js';
-import {select, settings} from './settings.js';
-
+import {select, settings, classNames} from './settings.js';
+import {Booking} from './components/booking.js';
 
 const app = {
   initMenu: function(){
@@ -14,13 +14,10 @@ const app = {
 
   init: function(){
     const thisApp = this;
-    //console.log('*** App starting ***');
-    //console.log('thisApp:', thisApp);
-    //console.log('classNames:', classNames);
-    //console.log('settings:', settings);
-    //console.log('templates:', templates);
     thisApp.initCart();
     thisApp.initData();
+    thisApp.initPages();
+    thisApp.initBooking();
   },
 
   initData: function(){
@@ -53,7 +50,57 @@ const app = {
     thisApp.productList.addEventListener('add-to-cart', function(event){
       app.cart.add(event.detail.product);
     });
+  },
+
+  initPages: function(){
+    const thisApp = this;
+    thisApp.pages = Array.from(document.querySelector(select.containerOf.pages).children);
+    thisApp.navLinks = document.querySelectorAll(select.nav.links);
+    let pagesMatchingHash = [];
+
+    if(window.location.hash.length >2){
+      const idFromHash = window.location.hash.replace('#/','');
+
+      pagesMatchingHash = thisApp.pages.filter(function(page){
+        return page.id == idFromHash;
+      });
+      thisApp.activatePage(pagesMatchingHash.length ? pagesMatchingHash[0].id : thisApp.pages[0].id);    
+    }
+    
+
+
+    for(let link of thisApp.navLinks){
+      link.addEventListener('click', function(event){
+        const clickedElement = this;
+        event.preventDefault();
+        /* TODO: get page id from href */
+        const id = clickedElement.getAttribute('href').replace('#','');
+        /*TODO: activate page */
+        thisApp.activatePage(id);
+      });
+    }
+  },
+
+  activatePage: function(pageId){
+    const thisApp = this;
+        
+    for(let link of thisApp.navLinks){
+      link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId);
+    }
+    
+    for(let page of thisApp.pages){
+      page.classList.toggle(classNames.nav.active, pageId == page.id);
+    }
+    window.location.hash = '#/' + pageId;
+  },
+
+  initBooking: function(){
+    const thisApp = this;
+    const bookingWidget = document.querySelector(select.containerOf.booking);
+    thisApp.booking = new Booking(bookingWidget);
+    
   }
 };
   
 app.init();
+

@@ -105,15 +105,16 @@ export class Booking{
     makeBooked(date, hour, duration, number){
       const thisBooking = this;
       if (typeof thisBooking.booked[date] == 'undefined') {
-      thisBooking.booked[date] = {};
+        thisBooking.booked[date] = {};
     }
 
-    const startHour = utils.hourToNumber(hour);
-    for (let hourBlock = startHour; hourBlock < startHour + duration; hourBlock += 0.5) {
-      if (typeof thisBooking.booked[date][hourBlock] == 'undefined') {
-        thisBooking.booked[date][hourBlock] = [];
-      }
-    }    
-  }
+      const startHour = utils.hourToNumber(hour);
+        for (let hourBlock = startHour; hourBlock < startHour + duration; hourBlock += 0.5) {
+          if (typeof thisBooking.booked[date][hourBlock] == 'undefined') {
+            thisBooking.booked[date][hourBlock] = [];
+          }
+      }      
+    }
+    
     
 } 

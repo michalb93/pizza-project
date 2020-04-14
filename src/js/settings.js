@@ -1,4 +1,4 @@
-/* global Handlebars*/
+/* global Handlebars */
 
 export const select = {
   templateOf: {
@@ -17,15 +17,6 @@ export const select = {
     menuProductsActive: '#product-list > .product.active',
     formInputs: 'input, select',
   },
-  datePicker: {
-    wrapper: '.date-picker',
-    input: `input[name="date"]`,
-  },
-  hourPicker: {
-    wrapper: '.hour-picker',
-    input: 'input[type="range"]',
-    output: '.output',
-  },
   menuProduct: {
     clickable: '.product__header',
     form: '.product__order',
@@ -40,8 +31,16 @@ export const select = {
       linkDecrease: 'a[href="#less"]',
       linkIncrease: 'a[href="#more"]',
     },
+    datePicker: {
+      wrapper: '.date-picker',
+      input: `input[name="date"]`,
+    },
+    hourPicker: {
+      wrapper: '.hour-picker',
+      input: 'input[type="range"]',
+      output: '.output',
+    },
   },
-    
   cart: {
     productList: '.cart__order-summary',
     toggleTrigger: '.cart__summary',
@@ -99,17 +98,16 @@ export const settings = {
     defaultValue: 1,
     defaultMin: 1,
     defaultMax: 9,
-  }, 
+  },
   datePicker: {
     maxDaysInFuture: 14,
-  }, 
+  },
   cart: {
     defaultDeliveryFee: 20,
   },
   booking: {
     tableIdAttribute: 'data-table',
   },
-
   db: {
     url: '//localhost:3131',
     product: 'product',

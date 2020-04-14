@@ -53,7 +53,6 @@ export class CartProduct{
     thisCartProduct.dom.wrapper.dispatchEvent(event);
   }
   
-
   initActions(){
     const thisCartProduct = this;
     //thisCartProduct.dom.edit.addEventListener('click', function(){

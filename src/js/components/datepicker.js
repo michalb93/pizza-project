@@ -2,8 +2,6 @@ import { select, settings } from '../settings.js';
 import { utils } from '../utils.js';
 import { BaseWidget } from './BaseWidget.js';
 
-
-
 export class DatePicker extends BaseWidget {
   constructor(wrapper) {
     super(wrapper, utils.dateToStr(new Date()));

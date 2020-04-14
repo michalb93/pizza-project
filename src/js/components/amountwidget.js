@@ -22,19 +22,7 @@ export class AmountWidget extends BaseWidget{
     thisWidget.dom.linkDecrease = thisWidget.dom.wrapper.querySelector(select.widgets.amount.linkDecrease);
     thisWidget.dom.linkIncrease = thisWidget.dom.wrapper.querySelector(select.widgets.amount.linkIncrease);
   }
-  /* method not nedded because of BaseWidget.js
-  setValue(value) {
-    const thisWidget = this;
-    const newValue = parseInt(value);
-    //value validation
-    if (newValue != thisWidget.value && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
-      thisWidget.value = newValue;
-      thisWidget.announce();
-    }
-    thisWidget.input.value = thisWidget.value;
-    // console.log(thisWidget.value);
-  }
-  */
+
 
   isValid(newValue){
     return !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax;
@@ -53,16 +41,6 @@ export class AmountWidget extends BaseWidget{
       thisWidget.value = thisWidget.value +1;
     });
   }
-
-  /* method not nedded because of BaseWidget.js
-    announce() {
-      const thisWidget = this;
-      const event = new CustomEvent('updated', {
-        bubbles: true
-      });
-      thisWidget.element.dispatchEvent(event);
-    }
-    */
 
   renderValue() {
     const thisWidget = this;
